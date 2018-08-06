@@ -1,8 +1,8 @@
 # CBAM-TensorFlow-Slim
 This is a Tensorflow implementation of ["CBAM: Convolutional Block Attention Module"](https://arxiv.org/pdf/1807.06521) aiming to be compatible on the [TensorFlow-Slim image classification model library](https://github.com/tensorflow/models/tree/master/research/slim).
-(This repo includes the implementation of ["SENet-tensorflow-slim"](https://github.com/kobiso/SENet-tensorflow-slim).)
+This repository includes the implementation of ["SENet-tensorflow-slim"](https://github.com/kobiso/SENet-tensorflow-slim).
 
-If you want to use simpler implementation, check the repository [CBAM-TensorFlow]() which includes simple tensorflow implementation of ResNext, Inception-ResNet-V2, and Inception-v4 on Cifar10 dataset.
+If you want to use simpler implementation, check the repository **"[CBAM-TensorFlow](https://github.com/kobiso/CBAM-tensorflow)"** which includes simple tensorflow implementation of [*ResNext*](https://arxiv.org/abs/1611.05431), [*Inception-V4*, and *Inception-ResNet-V2*](https://arxiv.org/abs/1602.07261) on Cifar10 dataset.
 
 ## CBAM: Convolutional Block Attention Module
 **CBAM** proposes an architectural unit called *"Convolutional Block Attention Module" (CBAM)* block to improve representation power by using attention mechanism: focusing on important features and supressing unnecessary ones.
@@ -55,7 +55,7 @@ And, you can run **CBAM_block** or **SE_block** added models in the below list b
 - ResNet V2 200 + CBAM / + SE
 
 ### Change *Reduction ratio*
-To change *reduction ratio*, you have to manually set the ratio on `def cbam_block(input_feature, name, ratio=16):` method for cbam_block or `def se_block(residual, name, ratio=8)` method for se_block in `CBAM-tensorflow-slim/nets/attention_module.py`.
+To change *reduction ratio*, you have to manually set the ratio on `def cbam_block(input_feature, name, ratio=16)` method for cbam_block or `def se_block(residual, name, ratio=8)` method for se_block in `CBAM-tensorflow-slim/nets/attention_module.py`.
 
 ## Train a Model
 You can find example of training script in `CBAM-tensorflow-slim/scripts/`.
@@ -168,13 +168,13 @@ CUDA_VISIBLE_DEVICES=0 python eval_image_classifier_loop.py \
 ```
 
 ## Related Works
-- [CBAM-TensorFlow](https://github.com/kobiso/CBAM-tensorflow)
-- [SENet-TensorFlow-Slim](https://github.com/kobiso/SENet-tensorflow-slim)
+- Repository: [CBAM-TensorFlow](https://github.com/kobiso/CBAM-tensorflow)
+- Repository: [SENet-TensorFlow-Slim](https://github.com/kobiso/SENet-tensorflow-slim)
 
 ## Reference
-- [CBAM: Convolutional Block Attention Module](https://arxiv.org/pdf/1807.06521)
-- [Squeeze-and-Excitation Networks](https://arxiv.org/pdf/1709.01507)
-- [TensorFlow-Slim image classification model library](https://github.com/tensorflow/models/tree/master/research/slim)
+- Paper: [CBAM: Convolutional Block Attention Module](https://arxiv.org/pdf/1807.06521)
+- Paper: [Squeeze-and-Excitation Networks](https://arxiv.org/pdf/1709.01507)
+- Repository: [TensorFlow-Slim image classification model library](https://github.com/tensorflow/models/tree/master/research/slim)
   
 ## Author
 Byung Soo Ko / kobiso62@gmail.com
