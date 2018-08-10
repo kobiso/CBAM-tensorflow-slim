@@ -169,6 +169,7 @@ CUDA_VISIBLE_DEVICES=0 python eval_image_classifier_loop.py \
 
 ## Related Works
 - Repository: [CBAM-TensorFlow](https://github.com/kobiso/CBAM-tensorflow)
+- Repository: [CBAM-Keras](https://github.com/kobiso/CBAM-keras)
 - Repository: [SENet-TensorFlow-Slim](https://github.com/kobiso/SENet-tensorflow-slim)
 
 ## Reference
