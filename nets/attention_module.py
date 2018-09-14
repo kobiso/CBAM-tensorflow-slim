@@ -4,7 +4,19 @@ from __future__ import print_function
 
 import tensorflow as tf
 
-def se_block(residual, name, ratio=8):
+def attach_attention_module(net, attention_module, block_scope=None):
+  if attention_module == 'se_block': # SE_block
+    se_block_scope = 'se_block' if block_scope is None else block_scope + '_SE'
+    net = se_block(net, se_block_scope)
+  elif attention_module == 'cbam_block': # CBAM_block
+    cbam_block_scope = 'cbam_block' if block_scope is None else block_scope + '_CBAM'
+    net = cbam_block(net, cbam_block_scope)
+  else:
+    raise Exception("'{}' is not supported attention module!".format(attention_module))
+
+  return net
+
+def se_block(input_feature, name, ratio=8):
   """Contains the implementation of Squeeze-and-Excitation(SE) block.
   As described in https://arxiv.org/abs/1709.01507.
   """
@@ -13,9 +25,9 @@ def se_block(residual, name, ratio=8):
   bias_initializer = tf.constant_initializer(value=0.0)
 
   with tf.variable_scope(name):
-    channel = residual.get_shape()[-1]
+    channel = input_feature.get_shape()[-1]
     # Global average pooling
-    squeeze = tf.reduce_mean(residual, axis=[1,2], keepdims=True)   
+    squeeze = tf.reduce_mean(input_feature, axis=[1,2], keepdims=True)   
     assert squeeze.get_shape()[1:] == (1,1,channel)
     excitation = tf.layers.dense(inputs=squeeze,
                                  units=channel//ratio,
@@ -31,8 +43,7 @@ def se_block(residual, name, ratio=8):
                                  bias_initializer=bias_initializer,
                                  name='recover_fc')    
     assert excitation.get_shape()[1:] == (1,1,channel)
-    # top = tf.multiply(bottom, se, name='scale')
-    scale = residual * excitation    
+    scale = input_feature * excitation    
   return scale
 
 
@@ -40,7 +51,7 @@ def cbam_block(input_feature, name, ratio=8):
   """Contains the implementation of Convolutional Block Attention Module(CBAM) block.
   As described in https://arxiv.org/abs/1807.06521.
   """
-  
+
   with tf.variable_scope(name):
     attention_feature = channel_attention(input_feature, 'ch_at', ratio)
     attention_feature = spatial_attention(attention_feature, 'sp_at')

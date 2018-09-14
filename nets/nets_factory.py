@@ -138,7 +138,7 @@ def get_network_fn(name, num_classes, weight_decay=0.0, is_training=False, atten
   def network_fn(images, **kwargs):
     arg_scope = arg_scopes_map[name](weight_decay=weight_decay)
     if attention_module is not None:
-      kwargs = {"attention_module": attention_module}
+      kwargs['attention_module'] = attention_module
     with slim.arg_scope(arg_scope):
       return func(images, num_classes, is_training=is_training, **kwargs)
   if hasattr(func, 'default_image_size'):

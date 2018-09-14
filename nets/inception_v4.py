@@ -28,7 +28,7 @@ import tensorflow as tf
 import sys
 
 from nets import inception_utils
-from nets.attention_module import se_block, cbam_block
+from nets.attention_module import attach_attention_module
 
 slim = tf.contrib.slim
 
@@ -228,14 +228,9 @@ def inception_v4_base(inputs, final_endpoint='Mixed_7d', scope=None, attention_m
       for idx in range(4):
         block_scope = 'Mixed_5' + chr(ord('b') + idx)
         net = block_inception_a(net, block_scope)
-        # Add SE_block
-        if attention_module == 'se_block':
-          se_block_scope = block_scope+'_SE'
-          net = se_block(net, se_block_scope)              
-        # Add CBAM_block
-        if attention_module == 'cbam_block':
-          cbam_block_scope = block_scope+'_CBAM'
-          net = cbam_block(net, cbam_block_scope)
+        # Add attention_module
+        if attention_module is not None:
+          net = attach_attention_module(net, attention_module, block_scope)
         if add_and_check_final(block_scope, net): return net, end_points
 
       # 35 x 35 x 384
@@ -248,14 +243,9 @@ def inception_v4_base(inputs, final_endpoint='Mixed_7d', scope=None, attention_m
       for idx in range(7):
         block_scope = 'Mixed_6' + chr(ord('b') + idx)
         net = block_inception_b(net, block_scope)
-        # Add SE_block
-        if attention_module == 'se_block':
-          se_block_scope = block_scope+'_SE'
-          net = se_block(net, se_block_scope)              
-        # Add CBAM_block
-        if attention_module == 'cbam_block':
-          cbam_block_scope = block_scope+'_CBAM'
-          net = cbam_block(net, cbam_block_scope)
+        # Add attention_module
+        if attention_module is not None:
+          net = attach_attention_module(net, attention_module, block_scope)
         if add_and_check_final(block_scope, net): return net, end_points
 
       # 17 x 17 x 1024
@@ -268,14 +258,9 @@ def inception_v4_base(inputs, final_endpoint='Mixed_7d', scope=None, attention_m
       for idx in range(3):
         block_scope = 'Mixed_7' + chr(ord('b') + idx)
         net = block_inception_c(net, block_scope)
-        # Add SE_block
-        if attention_module == 'se_block':
-          se_block_scope = block_scope+'_SE'
-          net = se_block(net, se_block_scope)              
-        # Add CBAM_block
-        if attention_module == 'cbam_block':
-          cbam_block_scope = block_scope+'_CBAM'
-          net = cbam_block(net, cbam_block_scope)
+        # Add attention_module
+        if attention_module is not None:
+          net = attach_attention_module(net, attention_module, block_scope)
         if add_and_check_final(block_scope, net): return net, end_points
   raise ValueError('Unknown final endpoint %s' % final_endpoint)
 

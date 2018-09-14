@@ -26,7 +26,7 @@ from __future__ import print_function
 
 
 import tensorflow as tf
-from nets.attention_module import se_block, cbam_block
+from nets.attention_module import attach_attention_module
 
 slim = tf.contrib.slim
 
@@ -51,12 +51,9 @@ def block35(net, scale=1.0, activation_fn=tf.nn.relu, scope=None, reuse=None, at
       # Use clip_by_value to simulate bandpass activation.
       scaled_up = tf.clip_by_value(scaled_up, -6.0, 6.0)    
       
-    # Add SE_block
-    if attention_module == 'se_block':
-      scaled_up = se_block(scaled_up, 'se_block') 
-    # Add CBAM_block
-    if attention_module == 'cbam_block':
-      scaled_up = cbam_block(scaled_up, 'cbam_block')
+    # Add attention_module
+    if attention_module is not None:
+      scaled_up = attach_attention_module(scaled_up, attention_module, scope)
       
     net += scaled_up
     if activation_fn:
@@ -86,12 +83,9 @@ def block17(net, scale=1.0, activation_fn=tf.nn.relu, scope=None, reuse=None, at
       # Use clip_by_value to simulate bandpass activation.
       scaled_up = tf.clip_by_value(scaled_up, -6.0, 6.0)
       
-    # Add SE_block
-    if attention_module == 'se_block':
-      scaled_up = se_block(scaled_up, 'se_block') 
-    # Add CBAM_block
-    if attention_module == 'cbam_block':
-      scaled_up = cbam_block(scaled_up, 'cbam_block')
+    # Add attention_module
+    if attention_module is not None:
+      scaled_up = attach_attention_module(scaled_up, attention_module, scope)
 
     net += scaled_up
     if activation_fn:
@@ -120,12 +114,9 @@ def block8(net, scale=1.0, activation_fn=tf.nn.relu, scope=None, reuse=None, att
       # Use clip_by_value to simulate bandpass activation.
       scaled_up = tf.clip_by_value(scaled_up, -6.0, 6.0)
       
-    # Add SE_block
-    if attention_module == 'se_block':
-      scaled_up = se_block(scaled_up, 'se_block') 
-    # Add CBAM_block
-    if attention_module == 'cbam_block':
-      scaled_up = cbam_block(scaled_up, 'cbam_block')
+    # Add attention_module
+    if attention_module is not None:
+      scaled_up = attach_attention_module(scaled_up, attention_module, scope)
 
     net += scaled_up
     if activation_fn:

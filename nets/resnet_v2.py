@@ -53,7 +53,7 @@ from __future__ import print_function
 import tensorflow as tf
 
 from nets import resnet_utils
-from nets.attention_module import se_block, cbam_block
+from nets.attention_module import attach_attention_module
 
 slim = tf.contrib.slim
 resnet_arg_scope = resnet_utils.resnet_arg_scope
@@ -102,12 +102,9 @@ def bottleneck(inputs, depth, depth_bottleneck, stride, rate=1,
                            normalizer_fn=None, activation_fn=None,
                            scope='conv3')
     
-    # Add SE_block
-    if attention_module == 'se_block':
-      residual = se_block(residual, 'se_block') 
-    # Add CBAM_block
-    if attention_module == 'cbam_block':
-      residual = cbam_block(residual, 'cbam_block')   
+    # Add attention_module
+    if attention_module is not None:
+      residual = attach_attention_module(residual, attention_module, scope)   
 
     output = shortcut + residual
 

@@ -59,7 +59,7 @@ from __future__ import print_function
 import tensorflow as tf
 
 from nets import resnet_utils
-from nets.attention_module import se_block, cbam_block
+from nets.attention_module import attach_attention_module
 
 
 resnet_arg_scope = resnet_utils.resnet_arg_scope
@@ -132,21 +132,15 @@ def bottleneck(inputs,
     if use_bounded_activations:
       # Use clip_by_value to simulate bandpass activation.
       residual = tf.clip_by_value(residual, -6.0, 6.0)
-      # Add SE_block
-      if attention_module == 'se_block':
-        residual = se_block(residual, 'se_block') 
-      # Add CBAM_block
-      if attention_module == 'cbam_block':
-        residual = cbam_block(residual, 'cbam_block')
+      # Add attention_module
+      if attention_module is not None:
+        residual = attach_attention_module(residual, attention_module, scope)
       
       output = tf.nn.relu6(shortcut + residual)
     else:
-      # Add SE_block
-      if attention_module == 'se_block':
-        residual = se_block(residual, 'se_block')   
-      # Add CBAM_block
-      if attention_module == 'cbam_block':
-        residual = cbam_block(residual, 'cbam_block')
+      # Add attention_module
+      if attention_module is not None:
+        residual = attach_attention_module(residual, attention_module, scope)
       
       output = tf.nn.relu(shortcut + residual)
     
